@@ -14,6 +14,17 @@
       ],
       "program": "${workspaceFolder}/src/index.js",
       "console": "integratedTerminal"
+    },
+    {
+      "type": "pwa-node",
+      "runtimeVersion": "16.13.0",
+      "request": "launch",
+      "name": "Deploy Commands",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/deploy-commands.js",
+      "console": "integratedTerminal"
     }
   ]
 }

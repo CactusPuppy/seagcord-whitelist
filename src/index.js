@@ -28,11 +28,15 @@ client.on("interactionCreate", async interaction => {
   if (!interaction.isCommand()) return;
 
   // If a command came from a different guild than the one we care about, ignore it
-  if (interaction.guildId !== process.env.DISCORD_GUILD_ID) return;
+  if (interaction.guildId !== process.env.DISCORD_GUILD_ID) {
+    console.log(`Mismatch between interaction guild ${interaction.guildId} and ${process.env.DISCORD_GUILD_ID}`);
+    return;
+  }
 
   // If this was not from a guild, reject
   if (!interaction.inGuild()) {
     await interaction.reply("Commands are not useable outside of servers.");
+    return;
   }
 
   // Fetch the command to execute

@@ -27,6 +27,9 @@ client.once("ready", () => {
 client.on("interactionCreate", async interaction => {
   if (!interaction.isCommand()) return;
 
+  // If a command came from a different guild than the one we care about, ignore it
+  if (interaction.guildId !== process.env.DISCORD_GUILD_ID) return;
+
   // Fetch the command to execute
   const command = client.commands.get(interaction.commandName);
 

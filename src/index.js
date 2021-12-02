@@ -3,6 +3,7 @@ const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
 require("dotenv").config();
 const token = process.env.DISCORD_TOKEN;
+const guildId = process.env.DISCORD_GUILD_ID;
 
 // Create a new client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -26,6 +27,15 @@ client.once("ready", () => {
 // Register handler for slash commands
 client.on("interactionCreate", async interaction => {
   if (!interaction.isCommand()) return;
+
+  // If a command came from a different guild than the one we care about, ignore it
+  if (interaction.guildId.toString() !== guildId) return;
+
+  // If this was not from a guild, reject
+  if (!interaction.inGuild()) {
+    await interaction.reply("Commands are not useable outside of servers.");
+    return;
+  }
 
   // Fetch the command to execute
   const command = client.commands.get(interaction.commandName);

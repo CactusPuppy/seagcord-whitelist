@@ -27,7 +27,7 @@ module.exports = {
    */
   async execute(interaction) {
     // ACK the interaction
-    if (interaction.channelId !== whitelistChannelId) {
+    if (interaction.channelId.toString() !== whitelistChannelId) {
       await interaction.reply({
         content:      `You must use the <#${whitelistChannelId}> channel for whitelist commands.`,
         ephemeral:    true,

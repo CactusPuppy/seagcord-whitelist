@@ -3,6 +3,7 @@ const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
 require("dotenv").config();
 const token = process.env.DISCORD_TOKEN;
+const guildId = process.env.DISCORD_GUILD_ID;
 
 // Create a new client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -28,10 +29,7 @@ client.on("interactionCreate", async interaction => {
   if (!interaction.isCommand()) return;
 
   // If a command came from a different guild than the one we care about, ignore it
-  if (interaction.guildId !== process.env.DISCORD_GUILD_ID) {
-    console.log(`Mismatch between interaction guild ${interaction.guildId} and ${process.env.DISCORD_GUILD_ID}`);
-    return;
-  }
+  if (interaction.guildId.toString() !== guildId) return;
 
   // If this was not from a guild, reject
   if (!interaction.inGuild()) {

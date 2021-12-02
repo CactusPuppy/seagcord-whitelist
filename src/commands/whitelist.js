@@ -5,6 +5,7 @@ const { SlashCommandBuilder, bold, inlineCode } = require("@discordjs/builders")
 const { usernameToUUID, uuidToUsername } = require("../utils/mojang-api");
 const { whitelistUser } = require("../utils/pterodactyl-api");
 const pterodactylServerIdentifier = process.env.PTERODACTYL_SERVER_IDENTIFIER;
+const whitelistChannelId = process.env.DISCORD_WHITELIST_CHANNEL_ID;
 const models = require("../database/models");
 const WhitelistEntry = models["WhitelistEntry"];
 require("dotenv").config();
@@ -26,7 +27,14 @@ module.exports = {
    */
   async execute(interaction) {
     // ACK the interaction
-    await interaction.deferReply({ ephemeral: true });
+    if (interaction.channelId !== whitelistChannelId) {
+      interaction.reply({
+        content:      `You must use the <#${whitelistChannelId}> channel for whitelist commands.`,
+        ephemeral:    true,
+      });
+      return;
+    }
+    await interaction.deferReply();
 
     // Validate the arguments
     const username = interaction.options.getString("username");

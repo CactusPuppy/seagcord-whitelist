@@ -3,7 +3,7 @@ const fs = require("fs");
 const token = process.env.DISCORD_TOKEN;
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { clientId, guildId } = require("../config.json");
+const clientId = process.env.DISCORD_CLIENT_ID, guildId = process.env.DISCORD_GUILD_ID;
 
 // Prepare to register all commands in src/commands
 const commands = [];

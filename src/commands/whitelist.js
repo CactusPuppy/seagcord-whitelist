@@ -4,7 +4,7 @@ const { CommandInteraction } = require("discord.js");
 const { SlashCommandBuilder, bold, inlineCode } = require("@discordjs/builders");
 const { usernameToUUID, uuidToUsername } = require("../utils/mojang-api");
 const { whitelistUser } = require("../utils/pterodactyl-api");
-const pterodactylServerIdentifier = process.env.PTERODACTYL_SERVER_IDENTIFIER;
+const pterodactylServerIdentifiers = (process.env.PTERODACTYL_SERVER_IDENTIFIERS || '').split(',');
 const whitelistChannelId = process.env.DISCORD_WHITELIST_CHANNEL_ID;
 const models = require("../database/models");
 const WhitelistEntry = models["WhitelistEntry"];
@@ -74,9 +74,10 @@ module.exports = {
 
 
     // Put in a request for whitelisting
-    const pterodactylData = await whitelistUser(username, pterodactylServerIdentifier);
-    if (pterodactylData.error) {
-      interaction.editReply(`Request to server failed: ${pterodactylData.error}`);
+    const responses = await Promise.all(pterodactylServerIdentifiers.map(identifier => whitelistUser(username, identifier)));
+    const failure = responses.find(data => data.error);
+    if (failure) {
+      interaction.editReply(`Request to server failed: ${failure}`);
       return;
     }
 

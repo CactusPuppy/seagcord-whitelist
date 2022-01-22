@@ -4,7 +4,7 @@ const { CommandInteraction } = require("discord.js");
 const { SlashCommandBuilder, bold, inlineCode } = require("@discordjs/builders");
 const { uuidToUsername } = require("../utils/mojang-api");
 const { unwhitelistUser } = require("../utils/pterodactyl-api");
-const pterodactylServerIdentifier = process.env.PTERODACTYL_SERVER_IDENTIFIER;
+const pterodactylServerIdentifiers = (process.env.PTERODACTYL_SERVER_IDENTIFIERS || '').split(',');
 const whitelistChannelId = process.env.DISCORD_WHITELIST_CHANNEL_ID;
 const models = require("../database/models");
 const WhitelistEntry = models["WhitelistEntry"];
@@ -59,9 +59,10 @@ module.exports = {
     }
 
     // Put in a request for unwhitelisting
-    data = await unwhitelistUser(username, pterodactylServerIdentifier);
-    if (data.error) {
-      interaction.editReply(`Request to server failed: ${data.error}`);
+    const responses = await Promise.all(pterodactylServerIdentifiers.map(identifier => unwhitelistUser(username, identifier)));
+    const failure = responses.find(data => data.error);
+    if (failure) {
+      interaction.editReply(`Request to server failed: ${failure}`);
       return;
     }
     const deleted = await previousEntry.destroy();

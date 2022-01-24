@@ -1,5 +1,6 @@
 // @ts-check
 
+require("dotenv").config();
 const { CommandInteraction } = require("discord.js");
 const { SlashCommandBuilder, bold, inlineCode } = require("@discordjs/builders");
 const { usernameToUUID, uuidToUsername } = require("../utils/mojang-api");
@@ -8,7 +9,6 @@ const pterodactylServerIdentifiers = (process.env.PTERODACTYL_SERVER_IDENTIFIERS
 const whitelistChannelId = process.env.DISCORD_WHITELIST_CHANNEL_ID;
 const models = require("../database/models");
 const WhitelistEntry = models["WhitelistEntry"];
-require("dotenv").config();
 
 
 module.exports = {

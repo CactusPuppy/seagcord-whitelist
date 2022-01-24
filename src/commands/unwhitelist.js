@@ -60,7 +60,7 @@ module.exports = {
 
     // Put in a request for unwhitelisting
     const responses = await Promise.all(pterodactylServerIdentifiers.map(identifier => unwhitelistUser(username, identifier)));
-    const failure = responses.find(data => data.error);
+    const failure = responses.find(value => value.error);
     if (failure) {
       interaction.editReply(`Request to server failed: ${failure}`);
       return;

@@ -5,7 +5,7 @@ const { CommandInteraction } = require("discord.js");
 const { SlashCommandBuilder, bold, inlineCode } = require("@discordjs/builders");
 const { uuidToUsername } = require("../utils/mojang-api");
 const { unwhitelistUser } = require("../utils/pterodactyl-api");
-const pterodactylServerIdentifiers = (process.env.PTERODACTYL_SERVER_IDENTIFIERS || '').split(',');
+const pterodactylServerIdentifiers = (process.env.PTERODACTYL_SERVER_IDENTIFIERS || "").split(",");
 const whitelistChannelId = process.env.DISCORD_WHITELIST_CHANNEL_ID;
 const models = require("../database/models");
 const WhitelistEntry = models["WhitelistEntry"];
@@ -39,7 +39,7 @@ module.exports = {
     }
 
     // Double-check account exists
-    let data = await uuidToUsername(previousEntry.mcUUID);
+    const data = await uuidToUsername(previousEntry.mcUUID);
     if (data.error) {
       if (data.error !== "Player not found") {
         interaction.editReply(data.error);
